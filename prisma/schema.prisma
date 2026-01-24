@@ -38,6 +38,7 @@ model Card {
   imgUrl        String?
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  deckCard DeckCard[] // Une Card peut être dans plusieurs Decks via DeckCard (N:M)
 }
 
 model User {
@@ -47,4 +48,23 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deck Deck[] // Un User peut avoir plusieurs Decks (1:N)
+}
+
+model Deck {
+  id        Int      @id @default(autoincrement())
+  name      String   
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      // Clé étrangère vers User
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deckCard DeckCard[] // Un Deck contient plusieurs Cards via DeckCard (N:M)
+}
+
+model DeckCard {
+  id     Int  @id @default(autoincrement())
+  deck   Deck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  deckId Int  // Clé étrangère vers Deck
+  card   Card @relation(fields: [cardId], references: [id])
+  cardId Int  // Clé étrangère vers Card
 }
