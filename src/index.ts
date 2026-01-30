@@ -2,6 +2,7 @@ import { createServer } from 'http';
 import { env } from './env';
 import { signUpRouter } from './routes/Auth/sign-up.route';
 import { signInRouter } from './routes/Auth/sign-in.route';
+import { cardsRouter } from './routes/cards.route';
 import express from 'express';
 import cors from 'cors';
 import { authenticateToken } from './auth.middleware.js';
@@ -30,11 +31,15 @@ app.get('/api/health', authenticateToken, (_req, res) => {
   res.json({ status: 'ok', message: 'TCG Backend Server is running' });
 });
 
+// ============= Authentification :
 // Route pour s'inscrire :
 app.use('/api/auth', signUpRouter);
 
 // Route pour se connecter :
 app.use('/api/auth', signInRouter);
+
+// ============= Cards :
+app.use('/api/cards', cardsRouter);
 
 // Start server only if this file is run directly (not imported for tests)
 if (require.main === module) {
