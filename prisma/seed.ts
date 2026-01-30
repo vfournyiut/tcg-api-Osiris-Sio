@@ -74,14 +74,14 @@ async function main() {
   console.log(`✅ Created ${pokemonData.length} Pokemon cards`);
 
   // Fonction :
-  const getDixCartesAleatoire = (cartes: { id: number }[]) => {
+  const getRandomTenCards = (cards: { id: number }[]) => {
     // Retourne un tableau avec les Id de 10 cartes aléatoires différentes à partir du tableau de cartes passé en paramètre.
-    const tabAleatoire = [...cartes].sort(() => 0.5 - Math.random()); // Mélange une copie du tableau
-    return tabAleatoire.slice(0, 10); // Retourne un tableau avec les 10 premiers éléments
+    const shuffledCards = [...cards].sort(() => 0.5 - Math.random()); // Mélange une copie du tableau
+    return shuffledCards.slice(0, 10); // Retourne un tableau avec les 10 premiers éléments
   };
 
   // Deck Red :
-  const redRandomCards = getDixCartesAleatoire(createdCards);
+  const redRandomCards = getRandomTenCards(createdCards);
   await prisma.deck.create({
     data: {
       name: 'Starter Deck',
@@ -99,7 +99,7 @@ async function main() {
   });
 
   // Deck Blue :
-  const blueRandomCards = getDixCartesAleatoire(createdCards);
+  const blueRandomCards = getRandomTenCards(createdCards);
   await prisma.deck.create({
     data: {
       name: 'Starter Deck',
