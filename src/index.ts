@@ -3,6 +3,11 @@ import { env } from './env';
 import { signUpRouter } from './routes/Auth/sign-up.route';
 import { signInRouter } from './routes/Auth/sign-in.route';
 import { cardsRouter } from './routes/cards.route';
+import { decksRouter } from './routes/Decks/decks.route';
+import { decksMineRouter } from './routes/Decks/decks-mine.route';
+import { getDecksIdRouter } from './routes/Decks/get-decks-id.route';
+import { patchDecksIdRouter } from './routes/Decks/patch-decks-id.route';
+import { deleteDecksIdRouter } from './routes/Decks/delete-decks-id.route';
 import express from 'express';
 import cors from 'cors';
 import { authenticateToken } from './auth.middleware.js';
@@ -40,6 +45,13 @@ app.use('/api/auth', signInRouter);
 
 // ============= Cards :
 app.use('/api/cards', cardsRouter);
+
+// ============= Decks :
+app.use('/api/decks', decksRouter); // Créer
+app.use('/api/decks', decksMineRouter); // Lister
+app.use('/api/decks', getDecksIdRouter); // Lister un deck grâce à son id
+app.use('/api/decks', patchDecksIdRouter); // Modifier un deck grâce à son id
+app.use('/api/decks', deleteDecksIdRouter); // Supprimer un deck grâce à son id
 
 // Start server only if this file is run directly (not imported for tests)
 if (require.main === module) {
