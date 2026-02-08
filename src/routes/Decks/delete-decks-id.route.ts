@@ -5,7 +5,23 @@ import { authenticateToken } from '../../auth.middleware';
 export const deleteDecksIdRouter = Router();
 
 // delete /api/decks/:id
-//Modifier le nom et/ou les cartes du deck de l'utilisateur authentifié.
+// Supprimer un deck par son ID.
+/**
+ * Route pour supprimer un deck par son ID.
+ * Vérifie que le deck appartient bien à l'utilisateur connecté avant suppression.
+ *
+ * @name DELETE /api/decks/:id
+ * @function
+ * @memberof module:routes/decks
+ * @param {Request} req - La requête Express avec l'ID du deck en paramètre.
+ * @param {Response} res - La réponse Express.
+ * @returns {Promise<Response>} - Une réponse JSON confirmant la suppression.
+ * @throws {400} ID du deck manquant ou invalide.
+ * @throws {401} Utilisateur non authentifié.
+ * @throws {403} Deck n'appartient pas à l'utilisateur.
+ * @throws {404} Deck introuvable.
+ * @throws {500} Erreur serveur.
+ */
 deleteDecksIdRouter.delete(
   '/:id',
   authenticateToken,

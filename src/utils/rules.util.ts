@@ -6,7 +6,14 @@ import {PokemonType} from "../generated/prisma/client";
  */
 
 /**
- * Retourne la faiblesse principale d'un type Pokemon
+ * Retourne la faiblesse principale d'un type Pokemon.
+ *
+ * @param {PokemonType} defenderType - Le type du Pokémon défenseur.
+ * @returns {PokemonType | null} - Le type de faiblesse ou null si aucune faiblesse n'est définie.
+ *
+ * @example
+ * // Retourne PokemonType.Electric
+ * getWeakness(PokemonType.Water);
  */
 export function getWeakness(defenderType: PokemonType): PokemonType | null {
     switch (defenderType) {
@@ -52,7 +59,18 @@ export function getWeakness(defenderType: PokemonType): PokemonType | null {
 }
 
 /**
- * Calcule le multiplicateur de dégâts selon les types
+ * Calcule le multiplicateur de dégâts selon les types.
+ *
+ * @param {PokemonType} attackerType - Le type du Pokémon attaquant.
+ * @param {PokemonType} defenderType - Le type du Pokémon défenseur.
+ * @returns {number} - Le multiplicateur de dégâts (2.0 pour super efficace, 1.0 sinon).
+ *
+ * @example
+ * // Retourne 2.0 (Super efficace)
+ * getDamageMultiplier(PokemonType.Water, PokemonType.Fire);
+ *
+ * // Retourne 1.0 (Normal)
+ * getDamageMultiplier(PokemonType.Fire, PokemonType.Water);
  */
 export function getDamageMultiplier(attackerType: PokemonType, defenderType: PokemonType): number {
     const weakness = getWeakness(defenderType);
@@ -66,7 +84,16 @@ export function getDamageMultiplier(attackerType: PokemonType, defenderType: Pok
 }
 
 /**
- * Calcule les dégâts infligés lors d'une attaque
+ * Calcule les dégâts infligés lors d'une attaque en prenant en compte les faiblesses.
+ *
+ * @param {number} attackerAttack - La valeur d'attaque du Pokémon attaquant.
+ * @param {PokemonType} attackerType - Le type du Pokémon attaquant.
+ * @param {PokemonType} defenderType - Le type du Pokémon défenseur.
+ * @returns {number} - Les dégâts finaux infligés (minimum 1).
+ *
+ * @example
+ * // Retourne 100 (50 * 2.0)
+ * calculateDamage(50, PokemonType.Water, PokemonType.Fire);
  */
 export function calculateDamage(
     attackerAttack: number,

@@ -4,7 +4,18 @@ import { prisma } from '../database';
 export const cardsRouter = Router();
 
 // GET /api/cards
-// Récupère la liste complète des cartes.
+/**
+ * Route pour récupérer la liste complète des cartes.
+ * Trie les cartes par numéro de Pokédex croissant.
+ *
+ * @name GET /api/cards
+ * @function
+ * @memberof module:routes/cards
+ * @param {Request} _req - La requête Express (inutilisée).
+ * @param {Response} res - La réponse Express.
+ * @returns {Promise<Response>} - Une réponse JSON contenant la liste des cartes.
+ * @throws {500} Erreur serveur.
+ */
 cardsRouter.get('/', async (_req: Request, res: Response) => {
   try {
     // Récupérer toutes les cartes, triées par numéro de Pokédex.

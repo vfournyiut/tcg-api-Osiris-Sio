@@ -6,6 +6,22 @@ export const getDecksIdRouter = Router();
 
 // GET /api/decks/:id
 // Lister un deck de l'utilisateur authentifié avec leurs cartes.
+/**
+ * Route pour récupérer un deck spécifique par son ID.
+ * Retourne le deck et ses cartes si l'utilisateur est autorisé.
+ *
+ * @name GET /api/decks/:id
+ * @function
+ * @memberof module:routes/decks
+ * @param {Request} req - La requête Express avec l'ID du deck en paramètre.
+ * @param {Response} res - La réponse Express.
+ * @returns {Promise<Response>} - Une réponse JSON contenant les détails du deck.
+ * @throws {400} ID du deck manquant ou invalide.
+ * @throws {401} Utilisateur non authentifié.
+ * @throws {403} Deck non trouvé pour cet utilisateur (accès refusé).
+ * @throws {404} Deck inexistant.
+ * @throws {500} Erreur serveur.
+ */
 getDecksIdRouter.get(
   '/:id',
   authenticateToken,

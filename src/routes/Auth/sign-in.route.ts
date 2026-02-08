@@ -7,6 +7,27 @@ export const signInRouter = Router();
 
 // POST /auth/login
 // Accessible via POST /api/auth/sign-in
+/**
+ * Route pour connecter un utilisateur existant.
+ * Vérifie les identifiants et retourne un token JWT.
+ *
+ * @name POST /api/auth/sign-in
+ * @function
+ * @memberof module:routes/auth
+ * @param {Request} req - La requête Express contenant email et password.
+ * @param {Response} res - La réponse Express.
+ * @returns {Promise<Response>} - Une réponse JSON contenant le token et les infos utilisateur.
+ * @throws {400} Données manquantes ou invalides.
+ * @throws {401} Email ou mot de passe incorrect.
+ * @throws {500} Erreur serveur.
+ *
+ * @example
+ * // Corps de la requête (req.body) :
+ * {
+ *   "email": "user@example.com",
+ *   "password": "password123"
+ * }
+ */
 signInRouter.post('/sign-in', async (req: Request, res: Response) => {
   const { email, password } = req.body;
 

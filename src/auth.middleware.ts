@@ -11,6 +11,16 @@ declare global {
   }
 }
 
+/**
+ * Middleware pour authentifier les utilisateurs via un token JWT.
+ * Vérifie la présence et la validité du token dans l'en-tête Authorization.
+ *
+ * @param {Request} req - La requête Express.
+ * @param {Response} res - La réponse Express.
+ * @param {NextFunction} next - La fonction pour passer au middleware suivant.
+ * @returns {void}
+ * @throws {401} Token manquant ou invalide.
+ */
 export const authenticateToken = (
   req: Request,
   res: Response,

@@ -7,6 +7,28 @@ export const signUpRouter = Router();
 
 // POST: Créer un utilisateur
 // Accessible via POST /api/auth/sign-up
+/**
+ * Route pour inscrire un nouvel utilisateur.
+ * Crée un compte utilisateur et retourne un token JWT.
+ *
+ * @name POST /api/auth/sign-up
+ * @function
+ * @memberof module:routes/auth
+ * @param {Request} req - La requête Express contenant username, email et password.
+ * @param {Response} res - La réponse Express.
+ * @returns {Promise<Response>} - Une réponse JSON contenant le token et les infos de l'utilisateur créé.
+ * @throws {400} Données manquantes, invalides ou format email incorrect.
+ * @throws {409} Email déjà utilisé.
+ * @throws {500} Erreur serveur.
+ *
+ * @example
+ * // Corps de la requête (req.body) :
+ * {
+ *   "username": "NewUser",
+ *   "email": "newuser@example.com",
+ *   "password": "securePassword123"
+ * }
+ */
 signUpRouter.post('/sign-up', async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
 
