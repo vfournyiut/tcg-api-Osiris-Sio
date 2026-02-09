@@ -13,6 +13,12 @@ decksRouter.post(
     try {
       const { name, cards } = req.body;
 
+      // Récupération de l'userId du token (sinon erreur 401) :
+      if (!req.user) {
+        return res.status(401).json({ error: 'Utilisateur non authentifié' });
+      }
+      const userId = req.user.userId;
+
       // Si au moins l'une des données est manquante/invalide, alors erreur 400 (côté client) :
       if (
         !name ||
@@ -47,12 +53,6 @@ decksRouter.post(
           });
         }
       }
-
-      // Récupération de l'userId du token (sinon erreur 401) :
-      if (!req.user) {
-        return res.status(401).json({ error: 'Utilisateur non authentifié' });
-      }
-      const userId = req.user.userId;
 
       // Création du deck :
       const newDeck = await prisma.deck.create({
