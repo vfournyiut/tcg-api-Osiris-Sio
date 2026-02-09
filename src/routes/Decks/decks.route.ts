@@ -6,6 +6,27 @@ export const decksRouter = Router();
 
 // POST /api/decks
 // Crée un nouveau deck pour l'utilisateur authentifié.
+/**
+ * Route pour créer un nouveau deck.
+ * Vérifie la validité des cartes et associe le deck à l'utilisateur connecté.
+ *
+ * @name POST /api/decks
+ * @function
+ * @memberof module:routes/decks
+ * @param {Request} req - La requête Express contenant name et cards (tableau d'IDs).
+ * @param {Response} res - La réponse Express.
+ * @returns {Promise<Response>} - Une réponse JSON contenant le deck créé.
+ * @throws {400} Données manquantes ou invalides (nom, cartes) ou carte inexistante.
+ * @throws {401} Utilisateur non authentifié.
+ * @throws {500} Erreur serveur.
+ *
+ * @example
+ * // Corps de la requête (req.body) :
+ * {
+ *   "name": "Mon Super Deck",
+ *   "cards": [1, 5, 25, 4, 12, 6, 9, 2, 33, 10] // Exactement 10 IDs
+ * }
+ */
 decksRouter.post(
   '/',
   authenticateToken,

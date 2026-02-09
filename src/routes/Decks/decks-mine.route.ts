@@ -6,6 +6,19 @@ export const decksMineRouter = Router();
 
 // GET /api/decks/mine
 // Lister tous les decks de l'utilisateur authentifié avec leurs cartes.
+/**
+ * Route pour récupérer les decks de l'utilisateur connecté.
+ * Retourne la liste des decks avec les détails des cartes associées.
+ *
+ * @name GET /api/decks/mine
+ * @function
+ * @memberof module:routes/decks
+ * @param {Request} req - La requête Express (nécessite authentification).
+ * @param {Response} res - La réponse Express.
+ * @returns {Promise<Response>} - Une réponse JSON contenant les decks de l'utilisateur.
+ * @throws {401} Utilisateur non authentifié.
+ * @throws {500} Erreur serveur.
+ */
 decksMineRouter.get(
   '/mine',
   authenticateToken,

@@ -1,3 +1,10 @@
+/**
+ * @file index.ts
+ * @description Point d'entrée de l'application Express.
+ * Configure les middlewares, les routes et démarre le serveur.
+ */
+
+// ... imports ...
 import { createServer } from 'http';
 import { env } from './env';
 import { signUpRouter } from './routes/Auth/sign-up.route';
@@ -32,6 +39,16 @@ app.use(express.static('public'));
 
 // Health check endpoint
 // Teste token avec le middleware
+/**
+ * Route de vérification de l'état de l'API.
+ * Nécessite un token valide.
+ *
+ * @name GET /api/health
+ * @function
+ * @param {Request} _req - La requête Express.
+ * @param {Response} res - La réponse Express.
+ * @returns {void}
+ */
 app.get('/api/health', authenticateToken, (_req, res) => {
   res.json({ status: 'ok', message: 'TCG Backend Server is running' });
 });

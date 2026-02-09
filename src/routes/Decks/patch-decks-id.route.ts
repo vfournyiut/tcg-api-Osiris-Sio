@@ -5,7 +5,35 @@ import { authenticateToken } from '../../auth.middleware';
 export const patchDecksIdRouter = Router();
 
 // patch /api/decks/:id
-//Modifier le nom et/ou les cartes du deck de l'utilisateur authentifié.
+// Modifier le nom et/ou les cartes du deck de l'utilisateur authentifié.
+/**
+ * Route pour modifier un deck existant (nom et/ou cartes).
+ *
+ * @name PATCH /api/decks/:id
+ * @function
+ * @memberof module:routes/decks
+ * @param {Request} req - La requête Express avec l'ID du deck en paramètre et les champs à modifier dans le body.
+ * @param {Response} res - La réponse Express.
+ * @returns {Promise<Response>} - Une réponse JSON confirmant la modification.
+ * @throws {400} Données invalides (ID, nom, cartes) ou carte inexistante.
+ * @throws {401} Utilisateur non authentifié.
+ * @throws {403} Deck n'appartient pas à l'utilisateur.
+ * @throws {404} Deck introuvable.
+ * @throws {500} Erreur serveur.
+ *
+ * @example
+ * // Corps de la requête (req.body) - Modification partielle :
+ * {
+ *   "name": "Nouveau Nom"
+ * }
+ *
+ * @example
+ * // Corps de la requête (req.body) - Modification complète :
+ * {
+ *   "name": "Nouveau Nom",
+ *   "cards": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+ * }
+ */
 patchDecksIdRouter.patch(
   '/:id',
   authenticateToken,
