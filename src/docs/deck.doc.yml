@@ -1,0 +1,356 @@
+paths:
+  /api/decks:
+    post:
+      summary: Créer un nouveau deck
+      tags: [Decks]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, cards]
+              properties:
+                name:
+                  type: string
+                  example: "Mon deck"
+                cards:
+                  type: array
+                  items:
+                    type: integer
+                  minItems: 10
+                  maxItems: 10
+            examples:
+              ValidDeck:
+                summary: Deck valide
+                value:
+                  name: "My Starter Deck"
+                  cards: [1, 4, 7, 25, 2, 5, 8, 26, 3, 6]
+              InvalidCardCount:
+                summary: Nombre de cartes invalide
+                value:
+                  name: "Incomplete Deck"
+                  cards: [1, 2] # 10 cartes requises
+              InvalidCardType:
+                summary: Type de carte invalide
+                value:
+                  name: "Invalid Cards"
+                  cards: ["1", 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              UnknownCard:
+                summary: Carte inexistante
+                value:
+                  name: "Deck with Nonexistent Card"
+                  cards: [999, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      responses:
+        201:
+          description: Deck créé avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  deck:
+                    $ref: '#/components/schemas/Deck'
+        400:
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                MissingData:
+                  summary: Données manquantes
+                  value:
+                    error: "Données manquantes/invalides. (name et cards sont requis...)"
+                InvalidCardIdType:
+                  summary: ID de carte invalide
+                  value:
+                    error: "La carte avec le numéro X n'est pas un numéro de carte valide."
+                CardNotFound:
+                  summary: Carte inexistante
+                  value:
+                    error: "La carte avec le numéro X n'existe pas."
+        401:
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Utilisateur non authentifié"
+        500:
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Erreur serveur"
+
+  /api/decks/mine:
+    get:
+      summary: Récupérer mes decks
+      tags: [Decks]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Liste des decks de l'utilisateur
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  decks:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/Deck'
+                        - type: object
+                          properties:
+                            deckId: 
+                              type: integer
+                            deckName: 
+                              type: string
+                            cards:
+                              type: array
+                              items:
+                                $ref: '#/components/schemas/Card'
+        401:
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Utilisateur non authentifié"
+
+  /api/decks/{id}:
+    get:
+      summary: Récupérer un deck par ID
+      tags: [Decks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID du deck
+      responses:
+        200:
+          description: Détails du deck
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deck'
+        400:
+          description: ID invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "ID du deck manquant"
+        401:
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Utilisateur non authentifié"
+        403:
+          description: Accès refusé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Deck non trouvé pour cet utilisateur"
+        404:
+          description: Deck non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "ID du deck inexistant"
+        500:
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Erreur serveur"
+                  
+    patch:
+      summary: Modifier un deck (nom ou cartes)
+      tags: [Decks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID du deck
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                cards:
+                  type: array
+                  items:
+                    type: integer
+                  minItems: 10
+                  maxItems: 10
+            examples:
+              ValidUpdate:
+                summary: Modification valide
+                value:
+                  name: "Updated Deck Name"
+                  cards: [6, 9, 12, 15, 18, 21, 24, 27, 30, 33]
+              InvalidUpdate:
+                summary: Modification invalide
+                value:
+                  name: 123 # Should be string
+                  cards: [1, 2] # Should be 10 cards
+      responses:
+        200:
+          description: Deck modifié avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deck'
+        400:
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                MissingId:
+                  summary: ID manquant
+                  value:
+                    error: "ID du deck manquant"
+                InvalidBody:
+                  summary: Corps invalide
+                  value:
+                    error: "Données invalides. (name est une chaîne...)"
+                InvalidCardId:
+                  summary: ID de carte invalide
+                  value:
+                    error: "La carte avec le numéro X n'est pas un numéro de carte valide."
+                CardNotFound:
+                  summary: Carte inexistante
+                  value:
+                    error: "La carte avec le numéro X n'existe pas."
+        401:
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Utilisateur non authentifié"
+        403:
+          description: Accès refusé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Deck non trouvé pour cet utilisateur"
+        404:
+          description: Deck non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "ID du deck inexistant"
+        500:
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Erreur serveur"
+                  
+    delete:
+      summary: Supprimer un deck
+      tags: [Decks]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID du deck
+      responses:
+        200:
+          description: Deck supprimé avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        400:
+          description: ID invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "ID du deck manquant"
+        401:
+          description: Non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Utilisateur non authentifié"
+        403:
+          description: Accès refusé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Deck non trouvé pour cet utilisateur"
+        404:
+          description: Deck non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "ID du deck inexistant"
+        500:
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Erreur serveur"

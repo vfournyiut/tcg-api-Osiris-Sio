@@ -1,0 +1,100 @@
+openapi: 3.0.0
+info:
+  title: API Documentation - TCG API Osiris Sio
+  version: 1.0.0
+  description: Documentation de l'API avec authentification JWT
+  contact:
+    name: AMEDRO Louis
+    email: louis.amedro@outlook.fr
+
+servers:
+  - url: http://localhost:3001
+    description: Serveur de développement
+  - url: https://api.production.com
+    description: Serveur de production
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Token JWT à obtenir via /auth/login'
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: 'Green'
+        email:
+          type: string
+          format: email
+          example: 'green@example.com'
+    
+    Card:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Pikachu"
+        hp:
+          type: integer
+          example: 35
+        attack:
+          type: integer
+          example: 55
+        type:
+          type: string
+          enum: [Normal, Fire, Water, Electric, Grass, Ice, Fighting, Poison, Ground, Flying, Psychic, Bug, Rock, Ghost, Dragon, Dark, Steel, Fairy]
+          example: "Electric"
+        pokedexNumber:
+          type: integer
+          example: 25
+        imgUrl:
+          type: string
+          nullable: true
+          example: "https://example.com/pikachu.png"
+    
+    Deck:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Mon Deck Electrique"
+        userId:
+          type: integer
+          example: 1
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Message d'erreur"
+        message:
+          type: string
+          example: "Message d'erreur alternatif"
+
+tags:
+  - name: Authentication
+    description: Gestion de l'authentification
+  - name: Cards
+    description: Gestion des cartes
+  - name: Decks
+    description: Gestion des decks
+

@@ -1,0 +1,22 @@
+paths:
+  /api/cards:
+    get:
+      summary: Liste de toutes les cartes (triées par Pokédex)
+      tags: [Cards]
+      responses:
+        200:
+          description: Liste des cartes récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Card'
+        500:
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Erreur serveur"

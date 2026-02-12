@@ -18,6 +18,8 @@ import { deleteDecksIdRouter } from './routes/Decks/delete-decks-id.route';
 import express from 'express';
 import cors from 'cors';
 import { authenticateToken } from './auth.middleware.js';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerDocument } from './docs/index';
 
 import 'dotenv/config';
 
@@ -59,6 +61,13 @@ app.use('/api/auth', signUpRouter);
 
 // Route pour se connecter :
 app.use('/api/auth', signInRouter);
+
+// ============= Documentation Swagger :
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: "API Documentation"
+}))
+
 
 // ============= Cards :
 app.use('/api/cards', cardsRouter);
