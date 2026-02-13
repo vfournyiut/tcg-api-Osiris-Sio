@@ -2,6 +2,7 @@
   "name": "template-tcg-api",
   "version": "1.0.0",
   "author": "",
+  "type": "module",
   "description": "TCG Pokemon-like Backend Server",
   "main": "dist/index.js",
   "scripts": {
