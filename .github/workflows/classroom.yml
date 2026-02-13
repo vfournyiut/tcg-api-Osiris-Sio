@@ -38,8 +38,14 @@ jobs:
       - name: Run TypeScript type check
         run: npm run ts:check
 
+      - name: Lint project
+        run: npm run lint
+
       - name: Build project
         run: npm run build
 
-      - name: Run test
+      - name: Format
+        run: npm run format
+
+      - name: Run tests
         run: npm run test
