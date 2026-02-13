@@ -11,6 +11,8 @@ import { deleteDecksIdRouter } from './routes/Decks/delete-decks-id.route'
 import express from 'express'
 import cors from 'cors'
 import { authenticateToken } from './auth.middleware.js'
+import swaggerUi from 'swagger-ui-express'
+import { swaggerDocument } from './docs/index'
 
 import 'dotenv/config'
 
