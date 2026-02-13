@@ -42,7 +42,7 @@
     "yamljs": "0.3.0"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.2",
+    "@eslint/js": "^9.39.2",
     "@types/bcrypt": "^6.0.0",
     "@types/bcryptjs": "2.4.6",
     "@types/cors": "2.8.17",
@@ -59,10 +59,11 @@
     "@vitest/ui": "4.0.15",
     "supertest": "7.2.2",
     "eslint": "9.39.2",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "prettier": "3.8.1",
     "tsx": "4.7.0",
     "typescript": "5.4.5",
-    "typescript-eslint": "8.54.0",
+    "typescript-eslint": "^8.54.0",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "4.0.15",
     "vitest-mock-extended": "3.1.0"
