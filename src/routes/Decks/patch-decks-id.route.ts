@@ -1,8 +1,8 @@
-import { type Request, type Response, Router } from 'express';
-import { prisma } from '../../database';
-import { authenticateToken } from '../../auth.middleware';
+import { type Request, type Response, Router } from 'express'
+import { prisma } from '../../database'
+import { authenticateToken } from '../../auth.middleware'
 
-export const patchDecksIdRouter = Router();
+export const patchDecksIdRouter = Router()
 
 // patch /api/decks/:id
 // Modifier le nom et/ou les cartes du deck de l'utilisateur authentifié.
@@ -41,30 +41,30 @@ patchDecksIdRouter.patch(
     try {
       // Récupération de l'userId du token (sinon erreur 401) :
       if (!req.user) {
-        return res.status(401).json({ error: 'Utilisateur non authentifié' });
+        return res.status(401).json({ error: 'Utilisateur non authentifié' })
       }
-      const userId = req.user.userId;
+      const userId = req.user.userId
 
       // Récupération de l'id du deck depuis les paramètres de l'URL :
-      const deckId = req.params.id;
+      const deckId = req.params.id
 
       // Si aucun id n'est passé en paramètre de l'URL, erreur 400 :
       if (!req.params.id || !Number.isInteger(parseInt(deckId))) {
-        return res.status(400).json({ error: 'ID du deck manquant' });
+        return res.status(400).json({ error: 'ID du deck manquant' })
       }
 
       // Vérifier si l'id correspond à un deck :
       const idWithDeck = await prisma.deck.findUnique({
-        where: { id: parseInt(deckId) }
-      });
+        where: { id: parseInt(deckId) },
+      })
 
       // Si l'id correspond à aucun deck, erreur 404 :
       if (!idWithDeck) {
-        return res.status(404).json({ error: 'ID du deck inexistant' });
+        return res.status(404).json({ error: 'ID du deck inexistant' })
       }
 
       // Récupération de la modification du deck :
-      const { name, cards } = req.body;
+      const { name, cards } = req.body
 
       // Si au moins l'une des données est manquante/invalide, alors erreur 400 (côté client) :
       if (
@@ -74,8 +74,8 @@ patchDecksIdRouter.patch(
       ) {
         return res.status(400).json({
           error:
-            'Données invalides. (name est une chaîne de caractères et cards est un tableau de 10 numéros de carte)'
-        });
+            'Données invalides. (name est une chaîne de caractères et cards est un tableau de 10 numéros de carte)',
+        })
       }
 
       // Vérification que chaque carte (ID) est bien dans la base de données si et seulement si des cartes sont passé en payload :
@@ -84,20 +84,20 @@ patchDecksIdRouter.patch(
           // On vérifie d'abord si c'est bien un nombre :
           if (typeof pokedexNumber !== 'number') {
             return res.status(400).json({
-              error: `La carte avec le numéro ${pokedexNumber} n'est pas un numéro de carte valide.`
-            });
+              error: `La carte avec le numéro ${pokedexNumber} n'est pas un numéro de carte valide.`,
+            })
           }
 
           // On vérifie si la carte existe en base de données :
           const card = await prisma.card.findFirst({
-            where: { pokedexNumber: pokedexNumber }
-          });
+            where: { pokedexNumber: pokedexNumber },
+          })
 
           // Si findFirst renvoie null, la carte n'existe pas :
           if (!card) {
             return res.status(400).json({
-              error: `La carte avec le numéro ${pokedexNumber} n'existe pas.`
-            });
+              error: `La carte avec le numéro ${pokedexNumber} n'existe pas.`,
+            })
           }
         }
       }
@@ -108,65 +108,65 @@ patchDecksIdRouter.patch(
         include: {
           deckCard: {
             include: {
-              card: true // On 'descend' dans la relation pour avoir les données des cartes
-            }
-          }
-        }
-      });
+              card: true, // On 'descend' dans la relation pour avoir les données des cartes
+            },
+          },
+        },
+      })
 
       // Si le deck n'existe pas :
       if (!deckIdUser) {
         return res
           .status(403)
-          .json({ error: 'Deck non trouvé pour cet utilisateur' });
+          .json({ error: 'Deck non trouvé pour cet utilisateur' })
       } else {
-        let nameUpdate = false;
-        let cardsUpdate = false;
+        let nameUpdate = false
+        let cardsUpdate = false
 
         // Mise à jour du nom du deck si et seulement si un nom est passé en payload :
         if (name) {
-          nameUpdate = true;
+          nameUpdate = true
           await prisma.deck.update({
             where: { id: parseInt(deckId), userId },
-            data: { name }
-          });
+            data: { name },
+          })
         }
 
         // Mise à jour des cartes du deck si et seulement si des cartes sont passé en payload :
         if (cards) {
-          cardsUpdate = true;
+          cardsUpdate = true
           await prisma.deck.update({
             where: { id: parseInt(deckId), userId },
             data: {
               deckCard: {
                 deleteMany: {
                   // Supprime tout
-                  deckId: parseInt(deckId)
+                  deckId: parseInt(deckId),
                 },
                 create: cards.map((cardId: number) => ({
                   // Recrée tout
                   card: {
-                    connect: { id: cardId }
-                  }
-                }))
-              }
-            }
-          });
+                    connect: { id: cardId },
+                  },
+                })),
+              },
+            },
+          })
         }
 
         if (nameUpdate || cardsUpdate) {
           return res.status(200).json({
-            message: `Modification du deck '${deckIdUser.name}' de l'utilisateur n°${userId} effectuée avec succès.`
-          });
+            message: `Modification du deck '${deckIdUser.name}' de l'utilisateur n°${userId} effectuée avec succès.`,
+          })
         } else {
           return res.status(200).json({
-            message: `Aucune modification n'a été effectuée sur le deck '${deckIdUser.name}' de l'utilisateur n°${userId}.`
-          });
+            message: `Aucune modification n'a été effectuée sur le deck '${deckIdUser.name}' de l'utilisateur n°${userId}.`,
+          })
         }
       }
     } catch (error) {
-      console.error('Erreur lors de la récupération des decks : ', error);
-      return res.status(500).json({ error: 'Erreur serveur' });
+      console.error('Erreur lors de la récupération des decks : ', error)
+      return res.status(500).json({ error: 'Erreur serveur' })
     }
-  }
-);
+  },
+)

@@ -1,10 +1,10 @@
-import 'express';
+import 'express'
 
 declare module 'express' {
   interface Request {
     user?: {
-      userId: number;
-      email: string;
-    };
+      userId: number
+      email: string
+    }
   }
 }

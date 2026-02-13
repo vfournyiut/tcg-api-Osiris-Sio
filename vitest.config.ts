@@ -1,11 +1,11 @@
-import { defineConfig } from 'vitest/config';
-import path from 'path';
+import { defineConfig } from 'vitest/config'
+import path from 'path'
 
 export default defineConfig({
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
-    }
+      '@': path.resolve(__dirname, './src'),
+    },
   },
   test: {
     globals: true,
@@ -27,14 +27,14 @@ export default defineConfig({
         'src/sockets/**',
         'src/models/**',
         'src/utils/**',
-        'src/types/**'
+        'src/types/**',
       ],
       thresholds: {
         branches: 100,
         functions: 100,
         lines: 100,
-        statements: 100
-      }
-    }
-  }
-});
+        statements: 100,
+      },
+    },
+  },
+})

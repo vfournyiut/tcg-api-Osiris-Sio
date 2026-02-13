@@ -1,8 +1,8 @@
-import { type Request, type Response, Router } from 'express';
-import { prisma } from '../../database';
-import { authenticateToken } from '../../auth.middleware';
+import { type Request, type Response, Router } from 'express'
+import { prisma } from '../../database'
+import { authenticateToken } from '../../auth.middleware'
 
-export const decksMineRouter = Router();
+export const decksMineRouter = Router()
 
 // GET /api/decks/mine
 // Lister tous les decks de l'utilisateur authentifié avec leurs cartes.
@@ -26,9 +26,9 @@ decksMineRouter.get(
     try {
       // Récupération de l'userId du token (sinon erreur 401) :
       if (!req.user) {
-        return res.status(401).json({ error: 'Utilisateur non authentifié' });
+        return res.status(401).json({ error: 'Utilisateur non authentifié' })
       }
-      const userId = req.user.userId;
+      const userId = req.user.userId
 
       // Récupération des decks de l'utilisateur :
       const decksUser = await prisma.deck.findMany({
@@ -36,11 +36,11 @@ decksMineRouter.get(
         include: {
           deckCard: {
             include: {
-              card: true // On 'descend' dans la relation pour avoir les données des cartes
-            }
-          }
-        }
-      });
+              card: true, // On 'descend' dans la relation pour avoir les données des cartes
+            },
+          },
+        },
+      })
 
       // Retourne les decks si tout est bon !
       return res.status(200).json({
@@ -53,13 +53,13 @@ decksMineRouter.get(
             id: deckCard.card.id,
             name: deckCard.card.name,
             pokedexNumber: deckCard.card.pokedexNumber,
-            imageUrl: deckCard.card.imgUrl
-          }))
-        }))
-      });
+            imageUrl: deckCard.card.imgUrl,
+          })),
+        })),
+      })
     } catch (error) {
-      console.error('Erreur lors de la récupération des decks : ', error);
-      return res.status(500).json({ error: 'Erreur serveur' });
+      console.error('Erreur lors de la récupération des decks : ', error)
+      return res.status(500).json({ error: 'Erreur serveur' })
     }
-  }
-);
+  },
+)
