@@ -19,4 +19,4 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Erreur serveur"
+                error: 'Erreur serveur'

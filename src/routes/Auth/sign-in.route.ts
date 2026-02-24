@@ -1,6 +1,7 @@
-import { type Request, type Response, Router } from 'express'
 import bcrypt from 'bcryptjs'
+import { type Request, type Response, Router } from 'express'
 import jwt from 'jsonwebtoken'
+
 import { prisma } from '../../database'
 
 export const signInRouter = Router()

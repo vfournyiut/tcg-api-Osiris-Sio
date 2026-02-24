@@ -1,23 +1,33 @@
+import 'dotenv/config'
+
+import cors from 'cors'
+import express from 'express'
 import { createServer } from 'http'
+import { Server } from 'socket.io'
+import swaggerUi from 'swagger-ui-express'
+
+import { authenticateToken, socketAuthenticator } from './auth.middleware.js'
+import { swaggerDocument } from './docs/index'
 import { env } from './env'
-import { signUpRouter } from './routes/Auth/sign-up.route'
 import { signInRouter } from './routes/Auth/sign-in.route'
+import { signUpRouter } from './routes/Auth/sign-up.route'
 import { cardsRouter } from './routes/cards.route'
 import { decksRouter } from './routes/Decks/decks.route'
 import { decksMineRouter } from './routes/Decks/decks-mine.route'
+import { deleteDecksIdRouter } from './routes/Decks/delete-decks-id.route'
 import { getDecksIdRouter } from './routes/Decks/get-decks-id.route'
 import { patchDecksIdRouter } from './routes/Decks/patch-decks-id.route'
-import { deleteDecksIdRouter } from './routes/Decks/delete-decks-id.route'
-import express from 'express'
-import cors from 'cors'
-import { authenticateToken } from './auth.middleware.js'
-import swaggerUi from 'swagger-ui-express'
-import { swaggerDocument } from './docs/index'
-
-import 'dotenv/config'
 
 // Create Express app
 export const app = express()
+
+// Create HTTP server and Socket.io instance
+const server = createServer(app)
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  },
+})
 
 // Middlewares
 app.use(
@@ -75,14 +85,24 @@ app.use('/api/decks', getDecksIdRouter) // Lister un deck grâce à son id
 app.use('/api/decks', patchDecksIdRouter) // Modifier un deck grâce à son id
 app.use('/api/decks', deleteDecksIdRouter) // Supprimer un deck grâce à son id
 
+// ============= Socket.io :
+// Utilisation du middleware d'authentification
+io.use(socketAuthenticator)
+
+// Écoute des connexions Socket.IO
+io.on('connection', (socket) => {
+  console.log("Un client authentifié s'est connecté:", socket.id)
+  console.log('Utilisateur:', socket.user)
+
+  socket.on('disconnect', () => {
+    console.log("Un client s'est déconnecté:", socket.id)
+  })
+})
+
 // Start server only if this file is run directly (not imported for tests)
 if (require.main === module) {
-  // Create HTTP server
-  const httpServer = createServer(app)
-
-  // Start server
   try {
-    httpServer.listen(env.PORT, () => {
+    server.listen(env.PORT, () => {
       console.log(`\n🚀 Server is running on http://localhost:${env.PORT}`)
       console.log(
         `🧪 Socket.io Test Client available at http://localhost:${env.PORT}`,
