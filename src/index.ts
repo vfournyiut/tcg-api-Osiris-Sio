@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express'
 import { authenticateToken, socketAuthenticator } from './auth.middleware.js'
 import { swaggerDocument } from './docs/index'
 import { env } from './env'
+import { handleRoomEvents } from './room.js'
 import { signInRouter } from './routes/Auth/sign-in.route'
 import { signUpRouter } from './routes/Auth/sign-up.route'
 import { cardsRouter } from './routes/cards.route'
@@ -93,6 +94,9 @@ io.use(socketAuthenticator)
 io.on('connection', (socket) => {
   console.log("Un client authentifié s'est connecté:", socket.id)
   console.log('Utilisateur:', socket.user)
+
+  // Gestion des événements de salle (matchmaking)
+  handleRoomEvents(io, socket)
 
   socket.on('disconnect', () => {
     console.log("Un client s'est déconnecté:", socket.id)
