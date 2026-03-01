@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express'
 import { authenticateToken, socketAuthenticator } from './auth.middleware.js'
 import { swaggerDocument } from './docs/index'
 import { env } from './env'
+import { handleGameEvents } from './game.js'
 import { handleRoomEvents } from './room.js'
 import { signInRouter } from './routes/Auth/sign-in.route'
 import { signUpRouter } from './routes/Auth/sign-up.route'
@@ -97,6 +98,9 @@ io.on('connection', (socket) => {
 
   // Gestion des événements de salle (matchmaking)
   handleRoomEvents(io, socket)
+
+  // Gestion des événements de jeu
+  handleGameEvents(io, socket)
 
   socket.on('disconnect', () => {
     console.log("Un client s'est déconnecté:", socket.id)
