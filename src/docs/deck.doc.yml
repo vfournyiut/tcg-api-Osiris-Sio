@@ -15,7 +15,7 @@ paths:
               properties:
                 name:
                   type: string
-                  example: "Mon deck"
+                  example: 'Mon deck'
                 cards:
                   type: array
                   items:
@@ -26,22 +26,22 @@ paths:
               ValidDeck:
                 summary: Deck valide
                 value:
-                  name: "My Starter Deck"
+                  name: 'My Starter Deck'
                   cards: [1, 4, 7, 25, 2, 5, 8, 26, 3, 6]
               InvalidCardCount:
                 summary: Nombre de cartes invalide
                 value:
-                  name: "Incomplete Deck"
+                  name: 'Incomplete Deck'
                   cards: [1, 2] # 10 cartes requises
               InvalidCardType:
                 summary: Type de carte invalide
                 value:
-                  name: "Invalid Cards"
-                  cards: ["1", 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                  name: 'Invalid Cards'
+                  cards: ['1', 2, 3, 4, 5, 6, 7, 8, 9, 10]
               UnknownCard:
                 summary: Carte inexistante
                 value:
-                  name: "Deck with Nonexistent Card"
+                  name: 'Deck with Nonexistent Card'
                   cards: [999, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       responses:
         201:
@@ -65,7 +65,7 @@ paths:
                 MissingData:
                   summary: Données manquantes
                   value:
-                    error: "Données manquantes/invalides. (name et cards sont requis...)"
+                    error: 'Données manquantes/invalides. (name et cards sont requis...)'
                 InvalidCardIdType:
                   summary: ID de carte invalide
                   value:
@@ -81,7 +81,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Utilisateur non authentifié"
+                error: 'Utilisateur non authentifié'
         500:
           description: Erreur serveur
           content:
@@ -89,7 +89,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Erreur serveur"
+                error: 'Erreur serveur'
 
   /api/decks/mine:
     get:
@@ -114,9 +114,9 @@ paths:
                         - $ref: '#/components/schemas/Deck'
                         - type: object
                           properties:
-                            deckId: 
+                            deckId:
                               type: integer
-                            deckName: 
+                            deckName:
                               type: string
                             cards:
                               type: array
@@ -129,7 +129,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Utilisateur non authentifié"
+                error: 'Utilisateur non authentifié'
 
   /api/decks/{id}:
     get:
@@ -158,7 +158,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "ID du deck manquant"
+                error: 'ID du deck manquant'
         401:
           description: Non authentifié
           content:
@@ -166,7 +166,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Utilisateur non authentifié"
+                error: 'Utilisateur non authentifié'
         403:
           description: Accès refusé
           content:
@@ -174,7 +174,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Deck non trouvé pour cet utilisateur"
+                error: 'Deck non trouvé pour cet utilisateur'
         404:
           description: Deck non trouvé
           content:
@@ -182,7 +182,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "ID du deck inexistant"
+                error: 'ID du deck inexistant'
         500:
           description: Erreur serveur
           content:
@@ -190,8 +190,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Erreur serveur"
-                  
+                error: 'Erreur serveur'
+
     patch:
       summary: Modifier un deck (nom ou cartes)
       tags: [Decks]
@@ -222,7 +222,7 @@ paths:
               ValidUpdate:
                 summary: Modification valide
                 value:
-                  name: "Updated Deck Name"
+                  name: 'Updated Deck Name'
                   cards: [6, 9, 12, 15, 18, 21, 24, 27, 30, 33]
               InvalidUpdate:
                 summary: Modification invalide
@@ -246,11 +246,11 @@ paths:
                 MissingId:
                   summary: ID manquant
                   value:
-                    error: "ID du deck manquant"
+                    error: 'ID du deck manquant'
                 InvalidBody:
                   summary: Corps invalide
                   value:
-                    error: "Données invalides. (name est une chaîne...)"
+                    error: 'Données invalides. (name est une chaîne...)'
                 InvalidCardId:
                   summary: ID de carte invalide
                   value:
@@ -266,7 +266,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Utilisateur non authentifié"
+                error: 'Utilisateur non authentifié'
         403:
           description: Accès refusé
           content:
@@ -274,7 +274,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Deck non trouvé pour cet utilisateur"
+                error: 'Deck non trouvé pour cet utilisateur'
         404:
           description: Deck non trouvé
           content:
@@ -282,7 +282,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "ID du deck inexistant"
+                error: 'ID du deck inexistant'
         500:
           description: Erreur serveur
           content:
@@ -290,8 +290,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Erreur serveur"
-                  
+                error: 'Erreur serveur'
+
     delete:
       summary: Supprimer un deck
       tags: [Decks]
@@ -321,7 +321,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "ID du deck manquant"
+                error: 'ID du deck manquant'
         401:
           description: Non authentifié
           content:
@@ -329,7 +329,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Utilisateur non authentifié"
+                error: 'Utilisateur non authentifié'
         403:
           description: Accès refusé
           content:
@@ -337,7 +337,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Deck non trouvé pour cet utilisateur"
+                error: 'Deck non trouvé pour cet utilisateur'
         404:
           description: Deck non trouvé
           content:
@@ -345,7 +345,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "ID du deck inexistant"
+                error: 'ID du deck inexistant'
         500:
           description: Erreur serveur
           content:
@@ -353,4 +353,4 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Erreur serveur"
+                error: 'Erreur serveur'

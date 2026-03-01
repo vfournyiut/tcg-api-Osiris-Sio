@@ -1,4 +1,5 @@
 import { type Request, type Response, Router } from 'express'
+
 import { prisma } from '../database'
 
 export const cardsRouter = Router()

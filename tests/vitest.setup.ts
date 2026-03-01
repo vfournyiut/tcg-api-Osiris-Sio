@@ -14,6 +14,11 @@ export const authMock = {
     req.user = { userId: 1 }
     next()
   }),
+  socketAuthenticator: vi.fn((socket, next) => {
+    // Par défaut, on simule un utilisateur authentifié :
+    socket.user = { userId: 1 }
+    next()
+  }),
 }
 
 // Mock du middleware d'authentification :

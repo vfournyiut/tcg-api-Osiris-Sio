@@ -1,6 +1,7 @@
 import { type Request, type Response, Router } from 'express'
-import { prisma } from '../../database'
+
 import { authenticateToken } from '../../auth.middleware'
+import { prisma } from '../../database'
 
 export const deleteDecksIdRouter = Router()
 

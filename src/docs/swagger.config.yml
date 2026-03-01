@@ -35,7 +35,7 @@ components:
           type: string
           format: email
           example: 'green@example.com'
-    
+
     Card:
       type: object
       properties:
@@ -44,7 +44,7 @@ components:
           example: 1
         name:
           type: string
-          example: "Pikachu"
+          example: 'Pikachu'
         hp:
           type: integer
           example: 35
@@ -53,16 +53,36 @@ components:
           example: 55
         type:
           type: string
-          enum: [Normal, Fire, Water, Electric, Grass, Ice, Fighting, Poison, Ground, Flying, Psychic, Bug, Rock, Ghost, Dragon, Dark, Steel, Fairy]
-          example: "Electric"
+          enum:
+            [
+              Normal,
+              Fire,
+              Water,
+              Electric,
+              Grass,
+              Ice,
+              Fighting,
+              Poison,
+              Ground,
+              Flying,
+              Psychic,
+              Bug,
+              Rock,
+              Ghost,
+              Dragon,
+              Dark,
+              Steel,
+              Fairy,
+            ]
+          example: 'Electric'
         pokedexNumber:
           type: integer
           example: 25
         imgUrl:
           type: string
           nullable: true
-          example: "https://example.com/pikachu.png"
-    
+          example: 'https://example.com/pikachu.png'
+
     Deck:
       type: object
       properties:
@@ -71,7 +91,7 @@ components:
           example: 1
         name:
           type: string
-          example: "Mon Deck Electrique"
+          example: 'Mon Deck Electrique'
         userId:
           type: integer
           example: 1
@@ -97,4 +117,3 @@ tags:
     description: Gestion des cartes
   - name: Decks
     description: Gestion des decks
-

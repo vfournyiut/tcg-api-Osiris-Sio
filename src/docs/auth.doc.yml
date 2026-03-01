@@ -21,26 +21,26 @@ paths:
               ValidUser:
                 summary: Inscription valide
                 value:
-                  username: "ash"
-                  email: "ash@example.com"
-                  password: "password123"
+                  username: 'ash'
+                  email: 'ash@example.com'
+                  password: 'password123'
               MissingFields:
                 summary: Données manquantes
                 value:
-                  username: "ash"
+                  username: 'ash'
                   # email et password manquants
               InvalidEmail:
                 summary: Email invalide
                 value:
-                  username: "ash"
-                  email: "invalid-email"
-                  password: "password123"
+                  username: 'ash'
+                  email: 'invalid-email'
+                  password: 'password123'
               ExistingEmail:
                 summary: Email déjà utilisé
                 value:
-                  username: "Test User"
-                  email: "red@example.com"
-                  password: "password123"
+                  username: 'Test User'
+                  email: 'red@example.com'
+                  password: 'password123'
       responses:
         201:
           description: Inscription réussie
@@ -65,11 +65,11 @@ paths:
                 MissingData:
                   summary: Données manquantes
                   value:
-                    error: "Données manquantes/invalides. (username, email et password sont requis et doivent être des chaînes de caractères)"
+                    error: 'Données manquantes/invalides. (username, email et password sont requis et doivent être des chaînes de caractères)'
                 InvalidEmail:
                   summary: Format email incorrect
                   value:
-                    error: "Email invalide."
+                    error: 'Email invalide.'
         409:
           description: Conflit
           content:
@@ -80,7 +80,7 @@ paths:
                 EmailExists:
                   summary: Email déjà utilisé
                   value:
-                    error: "Email déjà utilisé"
+                    error: 'Email déjà utilisé'
         500:
           description: Erreur serveur
           content:
@@ -88,7 +88,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Erreur serveur"
+                error: 'Erreur serveur'
 
   /api/auth/sign-in:
     post:
@@ -110,23 +110,23 @@ paths:
               ValidUser:
                 summary: Connexion valide
                 value:
-                  email: "red@example.com"
-                  password: "password123"
+                  email: 'red@example.com'
+                  password: 'password123'
               MissingFields:
                 summary: Données manquantes
                 value:
-                  email: "red@example.com"
+                  email: 'red@example.com'
                   # password manquant
               InvalidCredentials:
                 summary: Identifiants incorrects
                 value:
-                  email: "nored@example.com"
-                  password: "password123"
+                  email: 'nored@example.com'
+                  password: 'password123'
               InvalidPassword:
                 summary: Mot de passe incorrect
                 value:
-                  email: "red@example.com"
-                  password: "password"
+                  email: 'red@example.com'
+                  password: 'password'
       responses:
         200:
           description: Connexion réussie
@@ -151,7 +151,7 @@ paths:
                 MissingData:
                   summary: Données manquantes
                   value:
-                    error: "Données manquantes/invalides. (email et password sont requis et doivent être des chaînes de caractères)"
+                    error: 'Données manquantes/invalides. (email et password sont requis et doivent être des chaînes de caractères)'
         401:
           description: Échec d'authentification
           content:
@@ -162,11 +162,11 @@ paths:
                 UserNotFound:
                   summary: Utilisateur inexistant
                   value:
-                    error: "Email ou mot de passe incorrect"
+                    error: 'Email ou mot de passe incorrect'
                 InvalidPassword:
                   summary: Mot de passe incorrect
                   value:
-                    error: "Email ou mot de passe incorrect"
+                    error: 'Email ou mot de passe incorrect'
         500:
           description: Erreur serveur
           content:
@@ -174,4 +174,4 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
-                error: "Erreur serveur"
+                error: 'Erreur serveur'

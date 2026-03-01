@@ -1,15 +1,8 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import jwt from 'jsonwebtoken'
+import { Socket } from 'socket.io'
 
-// Étendre le type Request pour ajouter userId
-declare global {
-  namespace Express {
-    interface Request {
-      userId: number
-      password: string
-    }
-  }
-}
+import { env } from './env'
 
 /**
  * Middleware pour authentifier les utilisateurs via un token JWT.
@@ -49,7 +42,42 @@ export const authenticateToken = (
 
     // 4. Passer au prochain middleware ou à la route
     return next()
-  } catch (error) {
+  } catch (_error) {
     return res.status(401).json({ error: 'Token invalide ou expiré' })
+  }
+}
+
+/**
+ * Middleware Socket.io pour authentifier les clients via un token JWT.
+ * Vérifie le token présent dans socket.handshake.auth.token.
+ *
+ * @param {Socket} socket - L'objet socket de la connexion.
+ * @param {Function} next - La fonction pour passer au middleware suivant ou refuser la connexion.
+ */
+export const socketAuthenticator = (
+  socket: Socket,
+  next: (err?: Error) => void,
+) => {
+  const token = socket.handshake.auth.token // Format: "Bearer <token>"
+
+  if (!token) {
+    return next(new Error('Authentification échouée : Token manquant'))
+  }
+
+  try {
+    const decoded = jwt.verify(token, env.JWT_SECRET) as {
+      userId: number
+      email: string
+    }
+
+    // Injection des informations utilisateur dans le socket :
+    socket.user = {
+      userId: decoded.userId,
+      email: decoded.email,
+    }
+
+    return next()
+  } catch (_error) {
+    return next(new Error('Authentification échouée : Token invalide'))
   }
 }
