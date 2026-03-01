@@ -1,6 +1,7 @@
 import { Server, Socket } from 'socket.io'
 
 import { prisma } from './database'
+import { startGame } from './game'
 
 /**
  * Interface représentant une salle (room) de matchmaking.
@@ -11,7 +12,7 @@ import { prisma } from './database'
  * @property {Object} [opponent] - Informations sur l'adversaire (si présent).
  * @property {'waiting' | 'playing'} status - État actuel de la salle.
  */
-interface Room {
+export interface Room {
   id: string
   host: {
     userId: number
@@ -29,7 +30,7 @@ interface Room {
 }
 
 // Stockage des rooms en mémoire pour le matchmaking
-const rooms: Map<string, Room> = new Map()
+export const rooms: Map<string, Room> = new Map()
 let roomIdCounter = 1
 
 /**
@@ -240,35 +241,8 @@ export function handleRoomEvents(io: Server, socket: Socket) {
       const hostDeckCards = await getDeckCards(room.host.deckId)
       const opponentDeckCards = await getDeckCards(deckId)
 
-      // Démarrage de la partie : envoi de gameStarted aux deux joueurs
-      // Le Host reçoit sa main visible et celle de l'adversaire cachée
-      io.to(room.host.socketId).emit('gameStarted', {
-        roomId: room.id,
-        you: {
-          // host
-          username: room.host.username,
-          hand: hostDeckCards,
-        },
-        opponent: {
-          username: room.opponent!.username,
-          handSize: opponentDeckCards.length,
-        },
-      })
-
-      // L'opposant reçoit sa main visible et celle de l'hôte cachée
-      io.to(room.opponent.socketId).emit('gameStarted', {
-        roomId: room.id,
-        you: {
-          // opponent
-          username: room.opponent!.username,
-          hand: opponentDeckCards,
-        },
-        opponent: {
-          // host
-          username: room.host.username,
-          handSize: hostDeckCards.length,
-        },
-      })
+      // Démarrage de la partie : on le met dans game.ts
+      startGame(io, room, hostDeckCards, opponentDeckCards)
 
       // La room disparaît de la liste des rooms disponibles
       broadcastRoomsList(io)
